@@ -1,1 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amount in Words - Number to Words Converter</title>
+    <meta name="description" content="A free Number to Words tool — just enter a number and click the 'Convert in Words' button to instantly see it written out in words.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #ffffff;
+            color: #111827;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-lg {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header Styles */
+        .header {
+            border-bottom: 1px solid #e5e7eb;
+            background-color: #ffffff;
+            padding: 16px 0;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #000000;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f9fafb;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+
+        .status-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 64px 0 48px;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        .hero .subtitle {
+            color: #6b7280;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #6b7280;
+            max-width: 672px;
+            margin: 0 auto 48px;
+            line-height: 1.6;
+        }
+
+        /* Main Converter */
+        .converter-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            margin-bottom: 48px;
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-bottom: 32px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .main-input {
+            width: 100%;
+            padding: 20px 24px;
+            font-size: 24px;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            background-color: #f9fafb;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .main-input:focus {
+            border-color: #111827;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.1);
+        }
+
+        .main-input::placeholder {
+            color: #9ca3af;
+        }
+
+        /* Suggestions Dropdown */
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 8px;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 40;
+            overflow: hidden;
+            display: none;
+        }
+
+        .suggestions-dropdown.show {
+            display: block;
+        }
+
+        .suggestions-header {
+            padding: 12px;
+            background-color: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 12px;
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .suggestion-item {
+            width: 100%;
+            padding: 12px 16px;
+            text-align: left;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .suggestion-number {
+            font-family: 'Courier New', monospace;
+            color: #111827;
+            font-weight: 500;
+        }
+
+        .suggestion-preview {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        /* Error Message */
+        .error-message {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #dc2626;
+            background-color: #fef2f2;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (min-width: 1024px) {
+            .options-grid {
+                grid-template-columns: 2fr 1fr 2fr;
+            }
+        }
+
+        /* Format Selection */
+        .format-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+
+        .format-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .format-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .format-option:hover {
+            background-color: #f9fafb;
+        }
+
+        .format-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #111827;
+        }
+
+        .format-option label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+            cursor: pointer;
+        }
+
+        /* Letter Case Selection */
+        .case-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+
+        .case-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .case-select:focus {
+            border-color: #111827;
+            box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.1);
+        }
+
+        /* Convert Button */
+        .button-section {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .convert-btn {
+            width: 100%;
+            height: 48px;
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .convert-btn:hover:not(:disabled) {
+            background-color: #374151;
+        }
+
+        .convert-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Result Section */
+        .result-card {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            display: none;
+        }
+
+        .result-card.show {
+            display: block;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .result-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .result-info p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            border-color: #d1d5db;
+            color: #111827;
+        }
+
+        .copy-btn.copied {
+            color: #059669;
+            border-color: #10b981;
+        }
+
+        .result-content {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .result-text {
+            font-size: 18px;
+            color: #111827;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            margin-top: 80px;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-item {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background-color: #111827;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: #ffffff;
+            font-size: 24px;
+        }
+
+        .feature-item h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .feature-item p {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .converter-card {
+                padding: 24px;
+            }
+
+            .main-input {
+                font-size: 20px;
+                padding: 16px 20px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .logo-section {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Hide/Show utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        /* Icons (using Unicode characters) */
+        .icon-calculator::before { content: "🧮"; }
+        .icon-sparkles::before { content: "✨"; }
+        .icon-languages::before { content: "🌐"; }
+        .icon-zap::before { content: "⚡"; }
+        .icon-copy::before { content: "📋"; }
+        .icon-check::before { content: "✅"; }
+        .icon-alert::before { content: "⚠️"; }
+        .icon-arrow::before { content: "→"; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon icon-calculator"></div>
+                    <div class="logo-text">
+                        <h1>Amount in Words</h1>
+                        <p>A free Number to Words tool — just enter a number and click the "Convert in Words" button to instantly see it written out in words.</p>
+                    </div>
+                </div>
+                <div class="status-badge">
+                    <div class="status-dot"></div>
+                    <span class="status-text">AI Enhanced</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container-lg">
+            <h2>Convert numbers to words,<br><span class="subtitle">instantly.</span></h2>
+            <p>Transform any number into written words across multiple languages with AI-powered suggestions and smart error correction.</p>
+        </div>
+    </section>
+
+    <!-- Main Converter -->
+    <main class="container-lg">
+        <div class="converter-card">
+            <!-- Input Section -->
+            <div class="input-section">
+                <label class="input-label">Enter your number</label>
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        id="numberInput" 
+                        class="main-input" 
+                        placeholder="123456"
+                        autocomplete="off"
+                    >
+                    <div id="suggestionsDropdown" class="suggestions-dropdown">
+                        <div class="suggestions-header">
+                            <span class="icon-sparkles"></span>
+                            Smart suggestions
+                        </div>
+                        <div id="suggestionsList"></div>
+                    </div>
+                </div>
+                <div id="errorMessage" class="error-message hidden">
+                    <span class="icon-alert"></span>
+                    <span id="errorText"></span>
+                </div>
+            </div>
+
+            <!-- Options Grid -->
+            <div class="options-grid">
+                <!-- Format Selection -->
+                <div class="format-section">
+                    <h3>To:</h3>
+                    <div class="format-options">
+                        <div class="format-option">
+                            <input type="radio" id="words-international" name="format" value="words-international" checked>
+                            <label for="words-international">Words (International Format)</label>
+                        </div>
+                        <div class="format-option">
+                            <input type="radio" id="currency" name="format" value="currency">
+                            <label for="currency">Currency</label>
+                        </div>
+                        <div class="format-option">
+                            <input type="radio" id="check-writing" name="format" value="check-writing">
+                            <label for="check-writing">Check Writing</label>
+                        </div>
+                        <div class="format-option">
+                            <input type="radio" id="words-indian" name="format" value="words-indian">
+                            <label for="words-indian">Words (Indian Format)</label>
+                        </div>
+                        <div class="format-option">
+                            <input type="radio" id="rupees-english" name="format" value="rupees-english">
+                            <label for="rupees-english">Rupees English</label>
+                        </div>
+                        <div class="format-option">
+                            <input type="radio" id="words-hindi" name="format" value="words-hindi">
+                            <label for="words-hindi">Words Hindi</label>
+                        </div>
+                        <div class="format-option">
+                            <input type="radio" id="rupees-hindi" name="format" value="rupees-hindi">
+                            <label for="rupees-hindi">Rupees Hindi</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Letter Case Selection -->
+                <div class="case-section">
+                    <h3>Letter Case</h3>
+                    <select id="letterCase" class="case-select">
+                        <option value="lowercase">lowercase</option>
+                        <option value="uppercase">UPPERCASE</option>
+                        <option value="title">Title Case</option>
+                        <option value="sentence" selected>Sentence case</option>
+                    </select>
+                </div>
+
+                <!-- Convert Button -->
+                <div class="button-section">
+                    <button id="convertBtn" class="convert-btn">
+                        Convert in Words
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultCard" class="result-card">
+            <div class="result-header">
+                <div class="result-info">
+                    <h3>Result</h3>
+                    <p>Your number converted to words</p>
+                </div>
+                <button id="copyBtn" class="copy-btn">
+                    <span class="icon-copy"></span>
+                    Copy
+                </button>
+            </div>
+            <div class="result-content">
+                <p id="resultText" class="result-text"></p>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon icon-sparkles"></div>
+                <h3>AI-Powered</h3>
+                <p>Smart suggestions and error correction make number entry effortless and accurate.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon icon-languages"></div>
+                <h3>Multi-Language</h3>
+                <p>Convert numbers to words in English, French, and Spanish with perfect accuracy.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon icon-zap"></div>
+                <h3>Instant Results</h3>
+                <p>Real-time conversion as you type, with support for both standard and currency formats.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Application State
+        let currentFormat = 'words-international';
+        let currentLetterCase = 'sentence';
+        let isLoading = false;
+        let suggestions = [];
+
+        // DOM Elements
+        const numberInput = document.getElementById('numberInput');
+        const suggestionsDropdown = document.getElementById('suggestionsDropdown');
+        const suggestionsList = document.getElementById('suggestionsList');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const convertBtn = document.getElementById('convertBtn');
+        const resultCard = document.getElementById('resultCard');
+        const resultText = document.getElementById('resultText');
+        const copyBtn = document.getElementById('copyBtn');
+        const letterCaseSelect = document.getElementById('letterCase');
+
+        // Number to words data
+        const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+        const teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+        const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+        const scales = ['', 'thousand', 'million', 'billion', 'trillion'];
+        const hindiOnes = ['', 'एक', 'दो', 'तीन', 'चार', 'पांच', 'छह', 'सात', 'आठ', 'नौ'];
+        const hindiTeens = ['दस', 'ग्यारह', 'बारह', 'तेरह', 'चौदह', 'पंद्रह', 'सोलह', 'सत्रह', 'अठारह', 'उन्नीस'];
+        const hindiTens = ['', '', 'बीस', 'तीस', 'चालीस', 'पचास', 'साठ', 'सत्तर', 'अस्सी', 'नब्बे'];
+
+        // Text formatting function
+        function formatText(text, caseType) {
+            if (!text || typeof text !== 'string') return text || '';
+            
+            switch (caseType) {
+                case 'lowercase':
+                    return text.toLowerCase();
+                case 'uppercase':
+                    return text.toUpperCase();
+                case 'title':
+                    return text.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase());
+                case 'sentence':
+                default:
+                    return text.charAt(0).toUpperCase() + text.substring(1).toLowerCase();
+            }
+        }
+
+        // Basic group conversion (handles 0-999)
+        function convertGroup(n, lang = 'en') {
+            if (!n || n === 0) return '';
+            
+            let result = '';
+            const currentOnes = lang === 'hindi' ? hindiOnes : ones;
+            const currentTeens = lang === 'hindi' ? hindiTeens : teens;
+            const currentTens = lang === 'hindi' ? hindiTens : tens;
+            
+            if (n >= 100) {
+                const hundreds = Math.floor(n / 100);
+                if (hundreds > 0 && hundreds < currentOnes.length) {
+                    result += currentOnes[hundreds];
+                    result += lang === 'hindi' ? ' सौ' : ' hundred';
+                    n %= 100;
+                    if (n > 0) result += ' ';
+                }
+            }
+            
+            if (n >= 20) {
+                const tensDigit = Math.floor(n / 10);
+                if (tensDigit < currentTens.length) {
+                    result += currentTens[tensDigit];
+                    n %= 10;
+                    if (n > 0) {
+                        result += lang === 'en' ? '-' : ' ';
+                    }
+                }
+            } else if (n >= 10) {
+                const teenIndex = n - 10;
+                if (teenIndex < currentTeens.length) {
+                    result += currentTeens[teenIndex];
+                    n = 0;
+                }
+            }
+            
+            if (n > 0 && n < currentOnes.length) {
+                result += currentOnes[n];
+            }
+            
+            return result.trim();
+        }
+
+        // International format conversion
+        function convertInternationalFormat(num) {
+            if (num === 0) return 'zero';
+            
+            const groups = [];
+            let tempNum = num;
+            
+            while (tempNum > 0) {
+                groups.push(tempNum % 1000);
+                tempNum = Math.floor(tempNum / 1000);
+            }
+
+            let result = '';
+            for (let i = groups.length - 1; i >= 0; i--) {
+                if (groups[i] !== 0) {
+                    if (result) result += ' ';
+                    const groupText = convertGroup(groups[i], 'en');
+                    if (groupText) {
+                        result += groupText;
+                        if (i > 0 && i < scales.length) {
+                            result += ' ' + scales[i];
+                        }
+                    }
+                }
+            }
+            return result.trim() || 'zero';
+        }
+
+        // Indian number system conversion
+        function convertIndianFormat(num, isHindi = false) {
+            if (num === 0) return isHindi ? 'शून्य' : 'zero';
+            
+            let result = '';
+            const lang = isHindi ? 'hindi' : 'en';
+            
+            if (num >= 10000000) {
+                const crores = Math.floor(num / 10000000);
+                const croreText = convertGroup(crores, lang);
+                if (croreText) {
+                    result += croreText;
+                    result += isHindi ? ' करोड़' : ' crore';
+                    num %= 10000000;
+                    if (num > 0) result += ' ';
+                }
+            }
+            
+            if (num >= 100000) {
+                const lakhs = Math.floor(num / 100000);
+                const lakhText = convertGroup(lakhs, lang);
+                if (lakhText) {
+                    result += lakhText;
+                    result += isHindi ? ' लाख' : ' lakh';
+                    num %= 100000;
+                    if (num > 0) result += ' ';
+                }
+            }
+            
+            if (num >= 1000) {
+                const thousands = Math.floor(num / 1000);
+                const thousandText = convertGroup(thousands, lang);
+                if (thousandText) {
+                    result += thousandText;
+                    result += isHindi ? ' हजार' : ' thousand';
+                    num %= 1000;
+                    if (num > 0) result += ' ';
+                }
+            }
+            
+            if (num > 0) {
+                const remainingText = convertGroup(num, lang);
+                if (remainingText) {
+                    result += remainingText;
+                }
+            }
+            
+            return result.trim();
+        }
+
+        // Decimal part conversion function
+        function convertDecimalPart(decimal, format) {
+            try {
+                const decimalNum = Math.round(decimal * 100);
+                
+                if (decimalNum <= 0 || decimalNum >= 100) {
+                    return '';
+                }
+                
+                const decimalPlaces = 2;
+                
+                let numberText;
+                if (format === 'words-hindi' || format === 'rupees-hindi') {
+                    numberText = convertIndianFormat(decimalNum, true);
+                } else if (format === 'words-indian' || format === 'rupees-english') {
+                    numberText = convertIndianFormat(decimalNum, false);
+                } else {
+                    numberText = convertInternationalFormat(decimalNum);
+                }
+                
+                if (format === 'words-hindi' || format === 'rupees-hindi') {
+                    const hindiDenominators = ['', 'दशांश', 'शतांश', 'हजारवां', 'दस हजारवां'];
+                    const denominator = hindiDenominators[decimalPlaces] || 'भाग';
+                    return numberText + ' ' + denominator;
+                } else {
+                    const denominators = ['', 'tenth', 'hundredth', 'thousandth', 'ten-thousandth'];
+                    let denominator = denominators[decimalPlaces] || 'part';
+                    
+                    if (decimalNum > 1) {
+                        if (denominator === 'tenth') denominator = 'tenths';
+                        else if (denominator === 'hundredth') denominator = 'hundredths';
+                        else if (denominator === 'thousandth') denominator = 'thousandths';
+                        else if (denominator === 'ten-thousandth') denominator = 'ten-thousandths';
+                        else denominator = 'parts';
+                    }
+                    
+                    return numberText + ' ' + denominator;
+                }
+            } catch (error) {
+                return '';
+            }
+        }
+
+        // Check Writing format conversion
+        function convertToCheckWriting(num) {
+            if (num < 0) {
+                throw new Error('Only positive numbers are allowed in the "Check Writing" format. For negative values, please choose a different format.');
+            }
+            
+            const roundedNum = Math.round(Math.abs(num) * 100) / 100;
+            
+            if (roundedNum === 0) {
+                return 'zero';
+            }
+            
+            const dollars = Math.floor(roundedNum);
+            const cents = Math.round((roundedNum - dollars) * 100);
+            
+            // Special case: exactly 1 dollar with no cents
+            if (dollars === 1 && cents === 0) {
+                return 'one dollar';
+            }
+            
+            // All other cases use "dollars" (plural)
+            let result = '';
+            
+            if (dollars > 0) {
+                const dollarText = convertInternationalFormat(dollars);
+                result += dollarText;
+            } else {
+                result += 'zero';
+            }
+            
+            // Add cents in xx/100 format
+            const centsFormatted = cents.toString().padStart(2, '0');
+            result += ' and ' + centsFormatted + '/100 dollars';
+            
+            return result;
+        }
+
+        // Currency format conversion
+        function convertToCurrency(num) {
+            if (num < 0) {
+                throw new Error('Only positive numbers are allowed in the "Currency" format. For negative values, please choose a different format.');
+            }
+            
+            const roundedNum = Math.round(Math.abs(num) * 100) / 100;
+            
+            if (roundedNum === 0) {
+                return 'zero';
+            }
+            
+            const dollars = Math.floor(roundedNum);
+            const cents = Math.round((roundedNum - dollars) * 100);
+            
+            let result = '';
+            
+            if (dollars > 0) {
+                const dollarText = convertInternationalFormat(dollars);
+                result += dollarText;
+                result += dollars === 1 ? ' dollar' : ' dollars';
+                
+                if (cents > 0) {
+                    const centText = convertInternationalFormat(cents);
+                    result += ' and ' + centText;
+                    result += cents === 1 ? ' cent' : ' cents';
+                }
+            } else {
+                const centText = convertInternationalFormat(cents);
+                result += centText;
+                result += cents === 1 ? ' cent' : ' cents';
+            }
+            
+            return result;
+        }
+
+        // Main conversion function
+        function convertToWords(num, format = 'words-international') {
+            try {
+                // Handle currency and check writing formats specially
+                if (format === 'currency') {
+                    return convertToCurrency(num);
+                }
+                
+                if (format === 'check-writing') {
+                    return convertToCheckWriting(num);
+                }
+                
+                const wholePart = Math.floor(Math.abs(num));
+                const decimalPart = Math.abs(num) - wholePart;
+                
+                if (wholePart === 0 && decimalPart === 0) {
+                    return format.includes('hindi') ? 'शून्य' : 'zero';
+                }
+                
+                let result = '';
+                if (wholePart > 0) {
+                    if (format === 'words-international') {
+                        result = convertInternationalFormat(wholePart);
+                    } else if (format === 'words-indian') {
+                        result = convertIndianFormat(wholePart, false);
+                    } else if (format === 'words-hindi') {
+                        result = convertIndianFormat(wholePart, true);
+                    } else if (format === 'rupees-english') {
+                        result = convertIndianFormat(wholePart, false);
+                        result += wholePart === 1 ? ' rupee' : ' rupees';
+                    } else if (format === 'rupees-hindi') {
+                        result = convertIndianFormat(wholePart, true);
+                        result += ' रुपये';
+                    }
+                } else if (decimalPart > 0) {
+                    result = format.includes('hindi') ? 'शून्य' : 'zero';
+                }
+                
+                if (decimalPart > 0) {
+                    const decimalText = convertDecimalPart(decimalPart, format);
+                    if (decimalText) {
+                        if (result) {
+                            if (format === 'words-hindi' || format === 'rupees-hindi') {
+                                result += ' और ' + decimalText;
+                            } else {
+                                result += ' and ' + decimalText;
+                            }
+                        } else {
+                            result = decimalText;
+                        }
+                    }
+                }
+                
+                return result;
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        // Generate suggestions
+        function generateSuggestions(value) {
+            if (!value || value.length < 2) {
+                suggestions = [];
+                return;
+            }
+            
+            const fallbackSuggestions = [];
+            const num = parseInt(value);
+            if (!isNaN(num) && isFinite(num)) {
+                const suggestionNumbers = [
+                    (num * 10).toString(),
+                    (num * 100).toString(),
+                    (num + 1000).toString(),
+                    (num + 10000).toString()
+                ];
+                fallbackSuggestions.push(...suggestionNumbers.filter(s => parseFloat(s) <= 999999999999));
+            }
+            suggestions = fallbackSuggestions.slice(0, 5);
+        }
+
+        // Update suggestions UI
+        function updateSuggestionsUI() {
+            if (suggestions.length === 0) {
+                suggestionsDropdown.classList.remove('show');
+                return;
+            }
+
+            suggestionsList.innerHTML = '';
+            suggestions.forEach((suggestion, index) => {
+                const item = document.createElement('button');
+                item.className = 'suggestion-item';
+                item.onclick = () => handleSuggestionClick(suggestion);
+                
+                const content = document.createElement('div');
+                const number = document.createElement('div');
+                number.className = 'suggestion-number';
+                number.textContent = suggestion;
+                
+                const preview = document.createElement('div');
+                preview.className = 'suggestion-preview';
+                try {
+                    const converted = convertToWords(parseInt(suggestion), currentFormat);
+                    preview.textContent = converted ? converted.slice(0, 40) + '...' : 'Invalid number';
+                } catch (error) {
+                    preview.textContent = 'Preview unavailable';
+                }
+                
+                content.appendChild(number);
+                content.appendChild(preview);
+                
+                const arrow = document.createElement('span');
+                arrow.className = 'icon-arrow';
+                
+                item.appendChild(content);
+                item.appendChild(arrow);
+                suggestionsList.appendChild(item);
+            });
+            
+            suggestionsDropdown.classList.add('show');
+        }
+
+        // Handle suggestion click
+        function handleSuggestionClick(suggestion) {
+            numberInput.value = suggestion;
+            suggestionsDropdown.classList.remove('show');
+            convertNumber(suggestion);
+        }
+
+        // Show error
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+        }
+
+        // Hide error
+        function hideError() {
+            errorMessage.classList.add('hidden');
+        }
+
+        // Show loading state
+        function setLoading(loading) {
+            isLoading = loading;
+            if (loading) {
+                convertBtn.innerHTML = '<div class="spinner"></div>Converting...';
+                convertBtn.disabled = true;
+            } else {
+                convertBtn.innerHTML = 'Convert in Words';
+                convertBtn.disabled = false;
+            }
+        }
+
+        // Convert number
+        function convertNumber(inputValue = numberInput.value, showLoading = true) {
+            if (!inputValue || !inputValue.trim()) {
+                resultCard.classList.remove('show');
+                return;
+            }
+
+            if (showLoading) {
+                setLoading(true);
+            }
+            hideError();
+
+            try {
+                const num = parseFloat(inputValue);
+                
+                if (isNaN(num) || !isFinite(num)) {
+                    showError('Please enter a valid number');
+                    resultCard.classList.remove('show');
+                    return;
+                }
+
+                if (num > 999999999999) {
+                    showError('Number too large (max: 999 billion)');
+                    resultCard.classList.remove('show');
+                    return;
+                }
+
+                let convertedResult = convertToWords(num, currentFormat);
+                
+                if (!convertedResult || convertedResult === 'Error in conversion') {
+                    showError('Unable to convert this number');
+                    resultCard.classList.remove('show');
+                    return;
+                }
+
+                convertedResult = formatText(convertedResult, currentLetterCase);
+                resultText.textContent = convertedResult;
+                resultCard.classList.add('show');
+                
+            } catch (error) {
+                console.error('Conversion error:', error);
+                showError(error.message || 'Error converting number');
+                resultCard.classList.remove('show');
+            } finally {
+                if (showLoading) {
+                    setLoading(false);
+                }
+            }
+        }
+
+        // Copy result to clipboard
+        async function copyResult() {
+            if (resultText.textContent) {
+                try {
+                    await navigator.clipboard.writeText(resultText.textContent);
+                    copyBtn.innerHTML = '<span class="icon-check"></span>Copied!';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<span class="icon-copy"></span>Copy';
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                } catch (error) {
+                    console.error('Copy error:', error);
+                }
+            }
+        }
+
+        // Event Listeners
+        numberInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+            hideError();
+
+            if (value) {
+                generateSuggestions(value);
+                updateSuggestionsUI();
+                
+                const num = parseFloat(value);
+                if (!isNaN(num) && isFinite(num)) {
+                    convertNumber(value, false);
+                }
+            } else {
+                suggestionsDropdown.classList.remove('show');
+                resultCard.classList.remove('show');
+            }
+        });
+
+        numberInput.addEventListener('focus', () => {
+            if (numberInput.value && suggestions.length > 0) {
+                suggestionsDropdown.classList.add('show');
+            }
+        });
+
+        numberInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                convertNumber(numberInput.value, true);
+                suggestionsDropdown.classList.remove('show');
+            } else if (e.key === 'Escape') {
+                suggestionsDropdown.classList.remove('show');
+            }
+        });
+
+        // Format radio buttons
+        document.querySelectorAll('input[name="format"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                currentFormat = e.target.value;
+                if (numberInput.value) {
+                    convertNumber(numberInput.value, false);
+                }
+            });
+        });
+
+        // Letter case select
+        letterCaseSelect.addEventListener('change', (e) => {
+            currentLetterCase = e.target.value;
+            if (numberInput.value) {
+                convertNumber(numberInput.value, false);
+            }
+        });
+
+        // Convert button
+        convertBtn.addEventListener('click', () => {
+            convertNumber(numberInput.value, true);
+            suggestionsDropdown.classList.remove('show');
+        });
+
+        // Copy button
+        copyBtn.addEventListener('click', copyResult);
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!numberInput.contains(e.target) && !suggestionsDropdown.contains(e.target)) {
+                suggestionsDropdown.classList.remove('show');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            numberInput.focus();
+        });
+    </script>
+</body>
+</html>
